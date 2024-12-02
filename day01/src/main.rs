@@ -1,9 +1,11 @@
+#[allow(unused)]
 const TEST_INPUT: &str = r#"3   4
 4   3
 2   5
 1   3
 3   9
 3   3"#;
+#[allow(unused)]
 const INPUT_PATH: &str = "input.txt";
 
 fn parse_input(input: &str) -> (Vec<u32>, Vec<u32>) {
@@ -53,7 +55,7 @@ fn part_2(input: &str) -> u32 {
 
 fn main() {
     let input = &std::fs::read_to_string(INPUT_PATH).unwrap_or_else(|err| {
-        panic!("File {INPUT_PATH} could not be oppened because of an error: {err}")
+        panic!("File {INPUT_PATH} could not be oppened because of an error: {:?}", err)
     });
 
     let part_1_res = part_1(input);
