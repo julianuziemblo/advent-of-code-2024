@@ -13,8 +13,7 @@ fn parse_input(input: &str) -> Vec<Vec<i32>> {
     input
         .lines()
         .map(|line| {
-            line.trim()
-                .split_whitespace()
+            line.split_whitespace()
                 .map(|num| num.trim().parse().unwrap())
                 .collect()
         })
@@ -23,7 +22,7 @@ fn parse_input(input: &str) -> Vec<Vec<i32>> {
 
 fn is_good(seq: &[i32]) -> bool {
     let diff = seq[1].abs_diff(seq[0]);
-    if diff < 1 || diff > 3 {
+    if !(1..=3).contains(&diff) {
         return false;
     }
 
@@ -31,21 +30,18 @@ fn is_good(seq: &[i32]) -> bool {
     for tuple in seq.windows(2) {
         let (left, right) = (tuple[0], tuple[1]);
         let diff = right.abs_diff(left);
-        if diff < 1 || diff > 3 || ((right - left) > 0) != is_increasing {
+        if !(1..=3).contains(&diff) || ((right - left) > 0) != is_increasing {
             return false;
         }
     }
-    
+
     true
 }
 
 fn part_1(input: &str) -> usize {
     let lists = parse_input(input);
 
-    lists
-        .iter()
-        .filter(|&list| is_good(list))
-        .count()
+    lists.iter().filter(|&list| is_good(list)).count()
 }
 
 fn part_2(input: &str) -> usize {
