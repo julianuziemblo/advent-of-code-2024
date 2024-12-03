@@ -1,4 +1,4 @@
-extern crate regex;
+use regex::Regex;
 
 #[allow(unused)]
 const TEST_INPUT_1: &str =
@@ -9,8 +9,6 @@ const TEST_INPUT_2: &str =
 
 #[allow(unused)]
 const INPUT_PATH: &str = "input.txt";
-
-use regex::Regex;
 
 fn parse_input<'a, const N: usize>(input: &'a str, re: &'a Regex) -> impl Iterator<Item = &'a str> {
     re.captures_iter(input)
