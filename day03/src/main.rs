@@ -44,11 +44,7 @@ fn part_2(input: &str) -> u32 {
             "don" => (false, sum),
             "mul" => (
                 can_multiply,
-                if can_multiply {
-                    sum + execute_mul(op)
-                } else {
-                    sum
-                },
+                sum + if can_multiply { execute_mul(op) } else { 0 },
             ),
             _ => panic!("Unreachable, op={}", op),
         })
