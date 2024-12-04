@@ -24,7 +24,7 @@ fn execute_mul(mul: &str) -> u32 {
         .unwrap()
         .split(',')
         .map(|ch| ch.parse::<u32>().unwrap())
-        .fold(1, |accum, n| accum * n)
+        .product()
 }
 
 fn part_1(input: &str) -> u32 {
