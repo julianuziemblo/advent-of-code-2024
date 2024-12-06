@@ -38,7 +38,11 @@ type Rules = HashMap<Page, HashSet<Page>>;
 type Update = Vec<Page>;
 
 fn parse_input(input: &str) -> (Rules, Vec<Update>) {
-    let (rules_str, updates_str) = input.split_once("\n\n").unwrap();
+    #[cfg(windows)]
+    const DOUBLE_LINE_ENDING: &str = "\r\n\r\n";
+    #[cfg(not(windows))]
+    const DOUBLE_LINE_ENDING: &'static str = "\n\n";
+    let (rules_str, updates_str) = input.split_once(DOUBLE_LINE_ENDING).unwrap();
 
     let mut rules = Rules::new();
     let updates: Vec<Update> = updates_str
@@ -54,10 +58,10 @@ fn parse_input(input: &str) -> (Rules, Vec<Update>) {
         let (pre, post) = rule.trim().split_once('|').unwrap();
         (pre.trim().parse().unwrap(), post.trim().parse().unwrap())
     }) {
-        if !rules.contains_key(&k) {
+        if let std::collections::hash_map::Entry::Vacant(e) = rules.entry(k) {
             let mut rule_set = HashSet::new();
             rule_set.insert(v);
-            rules.insert(k, rule_set);
+            e.insert(rule_set);
         } else {
             rules.get_mut(&k).unwrap().insert(v);
         }
@@ -69,14 +73,14 @@ fn parse_input(input: &str) -> (Rules, Vec<Update>) {
 fn is_correct(update: &[Page], rules: &Rules) -> bool {
     for i in 0..update.len() {
         if let Some(rule_set) = rules.get(&update[i]) {
-            for j in 0..i {
-                if rule_set.contains(&update[j]) {
+            for elem in &update[..i] {
+                if rule_set.contains(elem) {
                     return false;
                 }
             }
         }
     }
-    return true;
+    true
 }
 
 fn fix(update: &mut [Page], rules: &Rules) {
